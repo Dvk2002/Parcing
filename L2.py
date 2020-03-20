@@ -38,7 +38,7 @@ def get_post_data(post_url:str) -> dict:
     soup = bs(responce.text, 'html.parser')
     template_data['url'] = post_url
     template_data['title'] = soup.select_one('article h1.blogpost-title').text
-    template_data['image'] = soup.select_one('div.blogpost-content img.src')
+    template_data['image'] = soup.select_one('div.blogpost-content img')['src']
     template_data['author']['name'] = soup.select_one('article div.text-lg').text
     template_data['author']['url'] = f"{url_base}{soup.select_one('div.col-md-5 a')['href']}"
     template_data['tags']= {item.text: f'{url_base}{item["href"]}' for item in soup.select('article a.small')}
@@ -65,6 +65,7 @@ if __name__ == '__main__':
             url_name = re.search("[^/]+$",url)[0]
             with open(f'{url_name}.json', 'w') as file:
                 file.write(json.dumps(data_post))
+            print(data_post)
     with open('tags.json', 'w') as file:
                 file.write(json.dumps(data_tag))
 
