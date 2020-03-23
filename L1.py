@@ -35,6 +35,12 @@ def dif_by_cat(cat_url, headers):
 
 if __name__ == '__main__':
 
-    dif_by_cat(cat_url, headers)
+    categories = requests.get(cat_url, headers=headers).json()
+    for cat in categories:
+        param_code, param_name = cat['parent_group_code'], re.search('[^"*\n]+', cat['parent_group_name'])[0]
+        print(param_name)
+
+
+    #dif_by_cat(cat_url, headers)
 
     print(1)
