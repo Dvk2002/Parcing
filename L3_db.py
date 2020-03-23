@@ -67,7 +67,7 @@ class AuthorsComments(Base):
 class Comments(Base):
     __tablename__ = 'comments'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    comment = Column(String, nullable=True, default='comment')
+    comment = Column(String, default='comment')
     author_id = Column(Integer, ForeignKey('authors.id'))
     author = relationship('Authors', back_populates='comment')
     author_comment_id = Column(Integer, ForeignKey('authors_comments.id'))
@@ -75,11 +75,13 @@ class Comments(Base):
     post_id = Column(Integer, ForeignKey('post.id'))
     post = relationship('Post', back_populates='comment')
 
-    def __init__(self, post_id, author_comments_id, author_id, post):
+    def __init__(self, post_id, author_comment_id, author_id, comment):
         self.post_id = post_id
-        self.author_comments_id = author_comments_id
+        self.author_comment_id = author_comment_id
         self.author_id = author_id
         self.post = post
+        self.comment = comment
+
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, relationship
@@ -123,17 +125,25 @@ for nick, url in L3_data.authors_data.items():
     except Exception as e:
         session.rollback()
 
-
 for title_name in L3_data.data.keys():
-
     post = Post(title_name, L3_data.data[title_name]['url'], L3_data.data[title_name]['comments_counts'], L3_data.data[title_name]['date_time'])
-
     session.add(post)
-    session.add(authors)
 
     try:
         session.commit()
     except Exception as e:
         session.rollback()
+    if L3_data.data[title_name]['authors_comments']:
+        for author_comment in L3_data.data[title_name]['authors_comments']:
+            post_id = session.query(Post.id).filter(Post.title_name == title_name).first()[0]
+            author_comment_id = session.query(AuthorsComments.id).filter(AuthorsComments.author_comments_name == author_comment['nick']).first()[0]
+            author_id = session.query(Authors.id).filter(Authors.author_name == L3_data.data[title_name]['author']['nick']).first()[0]
+            comments = Comments(post_id, author_comment_id, author_id, comment = 'comment')
+
+            session.add(comments)
+            try:
+                session.commit()
+            except Exception as e:
+                session.rollback()
 
 session.close()
