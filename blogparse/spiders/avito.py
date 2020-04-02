@@ -2,6 +2,8 @@
 import scrapy
 from scrapy.loader import ItemLoader
 from blogparse.items import AvitoRealEstateItem
+import requests
+import re
 
 
 class AvitoSpider(scrapy.Spider):
@@ -22,6 +24,13 @@ class AvitoSpider(scrapy.Spider):
         for ads_url in response.css('div.item_table h3.snippet-title a.snippet-link::attr("href")'):
             yield response.follow(ads_url, callback= self.ads_parse)
 
+    def get_phone(self, response):
+        _id = re.search('\d+$', response.url)[0]
+        url = f'https://m.avito.ru/api/1/items/{_id}/phone?key=af0deccbgcgidddjgnvljitntccdduijhdinfgjgfjir'
+        result = requests.get(url)
+        phone_number = '+'+ re.findall('number=%2B(\d+)',result.text)[0]
+        return phone_number
+
     def ads_parse(self, response):
         item = ItemLoader(AvitoRealEstateItem(), response)
         item.add_value('url', response.url)
@@ -34,5 +43,10 @@ class AvitoSpider(scrapy.Spider):
             param = sel.xpath(".//span/text()").get()
             item.add_value('item_param', {param:param_value})
         item.add_xpath('photos', "//div[contains(@class, 'gallery-img-frame')]/@data-url")
+        item.add_value('phone', self.get_phone(response))
+
         yield item.load_item()
+
+
+
         print(1)

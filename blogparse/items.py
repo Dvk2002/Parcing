@@ -40,5 +40,5 @@ class AvitoRealEstateItem(scrapy.Item):
     author_name = scrapy.Field(input_processor=lambda values: values[0].replace('\n ',''))
     author_url = scrapy.Field(input_processor= lambda values: f'https://www.avito.ru{values[0]}')
     item_param = scrapy.Field()
-    item_phone = scrapy.Field()
+    phone = scrapy.Field()
     photos = scrapy.Field(input_processor=MapCompose(clean_photo))
