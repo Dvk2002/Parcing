@@ -29,6 +29,8 @@ class InstaSpider(scrapy.Spider):
 
         super().__init__(**kwargs)
 
+
+
     def parse(self, response):
         login_url = 'https://www.instagram.com/accounts/login/ajax/'
         csrf_token = self.fetch_csrf_token(response.text)

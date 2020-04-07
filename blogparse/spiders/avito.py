@@ -24,6 +24,10 @@ class AvitoSpider(scrapy.Spider):
         for ads_url in response.css('div.item_table h3.snippet-title a.snippet-link::attr("href")'):
             yield response.follow(ads_url, callback= self.ads_parse)
 
+    # def test(self, response):
+    #     response.follow(f'/syzran/kvartiry/?p=16', callback=self.parse)
+    #     yield response.follow(f'/syzran/kvartiry/?p=16', callback=self.parse)
+
     def get_phone(self, response):
         _id = re.search(r'\d+$', response.url)[0]
         url = f'https://m.avito.ru/api/1/items/{_id}/phone?key=af0deccbgcgidddjgnvljitntccdduijhdinfgjgfjir'

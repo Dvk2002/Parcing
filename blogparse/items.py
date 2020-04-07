@@ -42,3 +42,13 @@ class AvitoRealEstateItem(scrapy.Item):
     item_param = scrapy.Field()
     phone = scrapy.Field()
     photos = scrapy.Field(input_processor=MapCompose(clean_photo))
+
+class ZillowItem(scrapy.Item):
+    _id = scrapy.Field()
+    url = scrapy.Field(output_processor = TakeFirst())
+    title = scrapy.Field()
+    photos = scrapy.Field()
+    price = scrapy.Field()
+    address = scrapy.Field()
+    sqrt = scrapy.Field()
+    sqft = scrapy.Field()

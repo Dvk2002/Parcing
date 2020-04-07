@@ -13,6 +13,7 @@ class BlogparseSpiderMiddleware(object):
     # scrapy acts as if the spider middleware does not modify the
     # passed objects.
 
+
     @classmethod
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
@@ -101,3 +102,4 @@ class BlogparseDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
