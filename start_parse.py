@@ -4,10 +4,11 @@ from pathlib import Path
 from scrapy.crawler import CrawlerProcess
 from scrapy.settings import Settings
 from blogparse import settings
-from blogparse.spiders.insta import InstaSpider
+# from blogparse.spiders.insta import InstaSpider
 # from blogparse.spiders.hubr_weekly import HubrWeeklySpider
 # from blogparse.spiders.gb_blog import GbBlogSpider
-# from blogparse.spiders.avito import AvitoSpider
+from blogparse.spiders.avito import AvitoSpider
+from blogparse.spiders.zillow import ZillowSpider
 
 
 
@@ -22,5 +23,8 @@ if __name__ == '__main__':
     crowler_proc = CrawlerProcess(settings= craw_settings)
     # crowler_proc.crawl(AvitoSpider)
     # crowler_proc.crawl(HubrWeeklySpider)
-    crowler_proc.crawl(InstaSpider, logpass=(os.getenv('INSTA_LOGIN'), os.getenv('INSTA_PWD')))
+    # crowler_proc.crawl(InstaSpider, logpass=(os.getenv('INSTA_LOGIN'), os.getenv('INSTA_PWD')))
+    crowler_proc.crawl(ZillowSpider)
+
+
     crowler_proc.start()
