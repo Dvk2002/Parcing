@@ -63,8 +63,11 @@ class JpgScan:
     def file_to_data(self):
         numbers = self.extract_number()
         data = {'name': self.name,
-                'numbers': {'recognized': numbers['recognized'], 'unrecognized': numbers['unrecognized'], 'side': numbers['side']},
-                'path': self.path, 'parent_path': self.path_par}
+                'numbers': {'recognized': numbers['recognized'],
+                            'unrecognized': numbers['unrecognized'],
+                            'side': numbers['side']},
+                'path': self.path,
+                'parent_path': self.path_par}
         return data
 
     def file_to_mongo(self):
@@ -77,7 +80,7 @@ class JpgScan:
 
 class PdfScan:
 
-    type = 'jpg'
+    type = 'pdf'
 
     def __init__(self, name_, path_):
         self.name = name_
